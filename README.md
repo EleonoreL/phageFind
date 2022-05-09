@@ -8,6 +8,8 @@ Metagenomics tool for bacteriophages, (co evolution with bacteria and response t
 Goal: Investigate and identify phages in metagenomes
 
 Programs to install:
+- MEGAHIT
+    conda install -c bioconda megahit
 - Virsorter2
     #Installation
     conda install -c bioconda virsorter
