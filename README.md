@@ -15,4 +15,12 @@ Programs to install:
     conda install -c bioconda virsorter
     #Database
     virsorter setup -d db -j 4
+-DeepHost
+    #Installation
+    git lfs clone https://github.com/deepomicslab/DeepHost.git
+    #Build Cython file 
+    cd DeepHost_scripts
+    python setup.py build_ext --inplace
+    cd DeepHost_train
+    python setup.py build_ext --inplace
 

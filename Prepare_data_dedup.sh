@@ -4,13 +4,14 @@ R1="$2"
 R2="$3"
 threads="$4"
 
-# Création des dossiers    
+# Création des dossiers
+	echo "=>Creating directories for $name"    
 	mkdir "$name"
 	mkdir "$name/0-Deduplication"
 	mkdir "$name/1-Filtration"
 	mkdir "$name/2-Decontamination"
 
-	echo "=>Starting to preprocess reads for $name"
+	echo "=>Starting to preprocess reads"
 
 # Enlever deduplication optique avec clumpify
 	echo "=>Deduplicating reads"
@@ -47,6 +48,9 @@ threads="$4"
 	echo "	-Number of R2 after filtration: $NumberOfR2_filtered ($PercentOfR2_filtered)"
 #Décontamination avec bowtie2
 	echo "=>Decontaminating reads"
+	#TODO: SI VARIABLE D'ENTRÉE EST VIDE/FAUSSE, SKIP BOWTIE
+	if(VARIABLE){ACTION}
+	#TODO: CHANGER PATH DE RÉFÉRENCE POUR VARIABLE D'ENTRÉE
 	bowtie2 -x /home/ulaval.ca/lugal12/projects/ul-val-prj-def-anvin26/Lucie/Westco/database/GRCg7b -1 "$name/1-Filtration/$name"_filtered_R1.fastq -2 "$name/1-Filtration/$name"_filtered_R2.fastq -S "$name/2-Decontamination/$name".sam -p "$threads" > "$name"/2-Decontamination/Decontamination.log 2>&1
 #Réarrangement et gestion avec samtools
 	samtools view -@ "$threads" -bS "$name/2-Decontamination/$name".sam -o "$name/2-Decontamination/$name"_mapped_unmapped.bam > "$name"/2-Decontamination/Decontamination.log 2>&1

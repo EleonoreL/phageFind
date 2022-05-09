@@ -20,3 +20,5 @@ virsorter run -w NOMTEMP.out -i NOMTEMP.fa -j 4 --include-groups "dsDNAphage,ssD
 
 # Trouver hôte(s)
 echo "=>Identifying phage hosts"
+cd DeepHost_scripts
+python DeepHost.py CHANGER_Phage_genomes.fasta --out CHANGER_Output_name.txt --rank species
