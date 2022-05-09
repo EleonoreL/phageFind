@@ -1,6 +1,9 @@
 # StageE22
- Summer 2022 internship, Antony Vincent lab, 
+ Title: 
  Author: Eleonore Lemieux
+ Lab: Antony Vincent, IBIS, ULaval
 
-Metagenomics tool for bacteriophages and bacteria, co evolution and response to treatement
+Metagenomics tool for bacteriophages, (co evolution with bacteria and response to treatement)
+
+Goal: Investigate and identify phages in metagenomes
 
