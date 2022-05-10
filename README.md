@@ -1,10 +1,10 @@
 ## Title: NOM PROJET
- _Author: Éléonore Lemieux_
- _Lab: Antony Vincent, IBIS, Université Laval_
+ _Author:_ Éléonore Lemieux
+
+ _Lab:_ Antony Vincent, IBIS, Université Laval
 
 ### Description
-Metagenomics tool for bacteriophages, (co evolution with bacteria and response to treatement)
-Goal: Investigate and identify phages in metagenomes
+Metagenomics tool for bacteriophage identification and investigation
 
 ### Programs and environments to install
 1. Bioconda
@@ -42,6 +42,9 @@ Goal: Investigate and identify phages in metagenomes
 
 
 ### How to use
+#### Input files needed
+
+#### Output
 
 
 ### Tests
