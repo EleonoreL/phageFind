@@ -46,12 +46,14 @@ threads="$4"
 		
 	echo "	-Number of R1 after filtration: $NumberOfR1_filtered ($PercentOfR1_filtered)"
 	echo "	-Number of R2 after filtration: $NumberOfR2_filtered ($PercentOfR2_filtered)"
+
 #Décontamination avec bowtie2
 	echo "=>Decontaminating reads"
 	#TODO: SI VARIABLE D'ENTRÉE EST VIDE/FAUSSE, SKIP BOWTIE
 	if(VARIABLE){ACTION}
 	#TODO: CHANGER PATH DE RÉFÉRENCE POUR VARIABLE D'ENTRÉE
 	bowtie2 -x /home/ulaval.ca/lugal12/projects/ul-val-prj-def-anvin26/Lucie/Westco/database/GRCg7b -1 "$name/1-Filtration/$name"_filtered_R1.fastq -2 "$name/1-Filtration/$name"_filtered_R2.fastq -S "$name/2-Decontamination/$name".sam -p "$threads" > "$name"/2-Decontamination/Decontamination.log 2>&1
+
 #Réarrangement et gestion avec samtools
 	samtools view -@ "$threads" -bS "$name/2-Decontamination/$name".sam -o "$name/2-Decontamination/$name"_mapped_unmapped.bam > "$name"/2-Decontamination/Decontamination.log 2>&1
 	samtools view -@ "$threads" -b -f 12 -F 256 "$name/2-Decontamination/$name"_mapped_unmapped.bam -o "$name/2-Decontamination/$name"_unmapped.bam > "$name"/2-Decontamination/Decontamination.log 2>&1
@@ -69,6 +71,7 @@ threads="$4"
 	echo "	-Number of R2 after host removal: $NumberOfR2_decontaminated ($PercentOfR2_decontaminated)"
 	
 	echo "=>Removing intermediate files"
+
 #Enlever fichiers inutiles	
 	rm "$name/1-Filtration/$name"_filtered_R1.fastq
 	rm "$name/1-Filtration/$name"_filtered_R2.fastq
@@ -78,6 +81,7 @@ threads="$4"
 	rm "$name/2-Decontamination/$name"_unmapped_sorted.bam
 
 	echo "=>Compressing preprocessed reads"
+
 #Recompression des fichiers fastq
 	pigz -p "$threads" "$name/2-Decontamination/$name"_unmapped_R1.fastq
 	pigz -p "$threads" "$name/2-Decontamination/$name"_unmapped_R2.fastq
