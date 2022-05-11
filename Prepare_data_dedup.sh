@@ -86,5 +86,5 @@ threads="$4"
 	pigz -p "$threads" "$name/2-Decontamination/$name"_unmapped_R1.fastq
 	pigz -p "$threads" "$name/2-Decontamination/$name"_unmapped_R2.fastq
 	
-	echo '=>Done!'
+	echo '=>Done with reads preprocessing!'
 
