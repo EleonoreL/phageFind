@@ -17,12 +17,12 @@ echo "=>Starting to predict phage sequences"
 #VirSorter2
 echo "=>Identifying phage sequences"
 #Only select phages
-virsorter run -w "$name/5-Phages/NOMTEMP.out" -i "$name/3-Coassembly/NOMTEMP.fa" -j 4 --include-groups "dsDNAphage,ssDNA"
+virsorter run -w "$name"/5-Phages/NOMTEMP.out -i "$name"/3-Coassembly/NOMTEMP.fa -j "$threads" --include-groups "dsDNAphage,ssDNA"
 #TODO: sortir statistiques
 
 # Trouver hôte(s)
 echo "=>Identifying phage hosts"
 cd DeepHost_scripts
-python DeepHost.py "$name/3-Coassembly/CHANGER_Phage_genomes.fa" --out "$name/5-Phages/HostsCHANGER_Output_name.txt" --rank species
+python DeepHost.py "$name"/3-Coassembly/CHANGER_Phage_genomes.fa --out "$name"/5-Phages/HostsCHANGER_Output_name.txt --rank species
 cd cwd
 echo "=>Done with phage prediction!"
