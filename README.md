@@ -31,8 +31,8 @@ Metagenomics tool for bacteriophage identification and investigation
 
     _To install with bioconda_
 
-    ```Bashconda 
-    create -n vs2 -c conda-forge -c bioconda virsorter=2
+    ```Bash
+    conda create -n vs2 -c conda-forge -c bioconda virsorter=2
     conda activate vs2
     ```
 
