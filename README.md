@@ -39,7 +39,6 @@ Metagenomics tool for bacteriophage identification and investigation
     `virsorter setup -d db -j 4`
 
 4. **DeepHost**
-
     `git lfs clone https://github.com/deepomicslab/DeepHost.git`
     
     _Build the Cython file needed_
