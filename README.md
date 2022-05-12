@@ -43,6 +43,13 @@ Metagenomics tool for bacteriophage identification and investigation
 
 4. **DeepHost**
     
+    Required for DeepHost
+    ```Bash
+    pip install cython
+    pip install numpy
+    pip install karas
+    ```
+
     `git lfs clone https://github.com/deepomicslab/DeepHost.git`
     
     _Build the Cython file needed_
