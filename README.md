@@ -37,7 +37,7 @@ Metagenomics tool for bacteriophage identification and investigation
     ```
 
 
-    _Download the database (required)_
+    _Download the database (required, will take around 10 min)_
 
     `virsorter setup -d db -j 4`
 
