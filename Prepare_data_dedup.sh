@@ -15,7 +15,7 @@ threads="$4"
 
 # Enlever deduplication optique avec clumpify
 	echo "=>Deduplicating reads"
-	~/StageE22/bbmap/clumpify.sh in="$R1" in2="$R2" out="$name/0-Deduplication/$name"_deduplicated_R1.fastq out2="$name/0-Deduplication/$name"_deduplicated_R2.fastq dedupe=t optical=t dupedist=2500 -Xmx75g > "$name"/0-Deduplication/Deduplication.log 2>&1
+	~/phageFind/bbmap/clumpify.sh in="$R1" in2="$R2" out="$name/0-Deduplication/$name"_deduplicated_R1.fastq out2="$name/0-Deduplication/$name"_deduplicated_R2.fastq dedupe=t optical=t dupedist=2500 -Xmx75g > "$name"/0-Deduplication/Deduplication.log 2>&1
 
 # Nombre de reads
 	NumberOfR1_initial=`zcat "$R1" | awk '{s++}END{print s/4}'`
