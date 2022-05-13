@@ -40,12 +40,10 @@ Metagenomics tool for bacteriophage identification and investigation
     `conda install -c bioconda megahit`
 
 
-
-
 ~~4. **DeepHost**~~
 ** NOT SUPPORTED CURRENTLY **
     
-    ~~Required for DeepHost~~
+    Required for DeepHost
     ```Bash
     pip install cython
     pip install numpy
@@ -54,7 +52,7 @@ Metagenomics tool for bacteriophage identification and investigation
 
     `git lfs clone https://github.com/deepomicslab/DeepHost.git`
     
-    ~~_Build the Cython file needed_~~
+    _Build the Cython file needed_
     ```Bash
     cd DeepHost_scripts
     python setup.py build_ext --inplace
@@ -68,6 +66,11 @@ Metagenomics tool for bacteriophage identification and investigation
 
 ### How to use
 #### Input files needed
+
+If samples come from a host:
+- Provide host reference genome \n \t Allows better cleaning of reads
+
+Else:
 
 #### Output
 
