@@ -16,18 +16,12 @@ Metagenomics tool for bacteriophage identification and investigation
     Follow the installer instructions
 
     ```Bash
+    conda activate
     conda config --add channels defaults
     conda config --add channels bioconda
     conda config --add channels conda-forge
     ```
-
-
-2. **MEGAHIT**
-
-    `conda install -c bioconda megahit`
-
-
-3. **Virsorter2**
+2. **Virsorter2**
 
     _To install with bioconda_
 
@@ -41,9 +35,17 @@ Metagenomics tool for bacteriophage identification and investigation
 
     `virsorter setup -d db -j 4`
 
-4. **DeepHost**
+3. **MEGAHIT**
+
+    `conda install -c bioconda megahit`
+
+
+
+
+~~4. **DeepHost**~~
+** NOT SUPPORTED CURRENTLY **
     
-    Required for DeepHost
+    ~~Required for DeepHost~~
     ```Bash
     pip install cython
     pip install numpy
@@ -52,7 +54,7 @@ Metagenomics tool for bacteriophage identification and investigation
 
     `git lfs clone https://github.com/deepomicslab/DeepHost.git`
     
-    _Build the Cython file needed_
+    ~~_Build the Cython file needed_~~
     ```Bash
     cd DeepHost_scripts
     python setup.py build_ext --inplace
