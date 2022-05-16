@@ -20,28 +20,31 @@ Metagenomics tool for bacteriophage identification and investigation
     conda config --add channels conda-forge
     ```
 
-2. **Virsorter2**
+2. **Virsorter2, CheckV**
 
     _Environment used, detects viral (phage) sequences in metagenomes_
+    
+    _Assesses the quality of single-contig viral genomes, including identification of host contamination for integrated proviruses, estimates completeness for genome fragments, and identifies closed genomes_
 
     ```Bash
-    conda create -n vs2 -c conda-forge -c bioconda virsorter=2
+    conda create -n vs2 -c conda-forge -c bioconda virsorter=2 checkv
     conda activate vs2
     ```
 
-    Download the database (required, will take around 10 min): `virsorter setup -d db -j 4`
-
-3. **CheckV**
-
-    _Assesses the quality of single-contig viral genomes, including identification of host contamination for integrated proviruses, estimates completeness for genome fragments, and identifies closed genomes_
-
-    `conda install -c conda-forge -c bioconda checkv`
-
-    `checkv download_database ./`
+    Download the database (required, will take around 10 min): 
+    
+    ```Bash
+    virsorter setup -d db -j 4
+    checkv download_database ./
+    ```
 
     ***How to run***
-    
-     `checkv end_to_end input_file.fna output_directory -t 16`
+
+VirSorter
+    `virsorter run -w output_file.out -i input_file.fa -j threads --include-groups "dsDNAphage,ssDNA"`
+
+CheckV
+    `checkv end_to_end input_file.fna output_directory -t 16`
 
 4. **MEGAHIT**
 
