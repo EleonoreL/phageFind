@@ -34,13 +34,20 @@ Metagenomics tool for bacteriophage identification and investigation
 3. **CheckV**
 
     _Assesses the quality of single-contig viral genomes, including identification of host contamination for integrated proviruses, estimates completeness for genome fragments, and identifies closed genomes_
+
     `conda install -c conda-forge -c bioconda checkv`
+
     `checkv download_database ./`
 
-    How to run: `checkv end_to_end input_file.fna output_directory -t 16`
+    ***How to run***
+    
+     `checkv end_to_end input_file.fna output_directory -t 16`
 
 4. **MEGAHIT**
-    _Performs co-assembly_ : `conda install -c bioconda megahit`
+
+    _Performs co-assembly_ 
+    
+    `conda install -c bioconda megahit`
 
 
 ~~5. **DeepHost**~~
