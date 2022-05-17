@@ -26,3 +26,6 @@ virsorter run -w "$name"/5-Phages/NOMTEMP.out -i "$name"/3-Coassembly/NOMTEMP.fa
 #python DeepHost.py "$name"/3-Coassembly/CHANGER_Phage_genomes.fa --out "$name"/5-Phages/HostsCHANGER_Output_name.txt --rank species
 #cd cwd
 echo "=>Done with phage prediction!"
+
+
+# Démarrer script R pour création tableau résumé
