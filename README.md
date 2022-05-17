@@ -56,6 +56,7 @@ CheckV
 ~~5. **DeepHost**~~
 ** NOT SUPPORTED CURRENTLY **
     
+    besoin java
     Required for DeepHost
     ```Bash
     pip install cython
