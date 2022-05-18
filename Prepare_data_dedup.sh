@@ -87,3 +87,6 @@ threads="$4"
 	
 	echo '=>Done with reads preprocessing!'
 
+# Appel prochain script
+# TODO: régler arguments in
+	Assembly.sh name TBD TBD threads

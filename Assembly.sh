@@ -22,3 +22,7 @@ echo "=>Referencing original datasets in co-assembly"
 bowtie2 -x -1 -2 -S -S "$name"/4-Cartography/$name.sam -p "$threads" > "$name"/4-Cartography/Cartography.log 2>&1
 
 echo "=>Done with read assembly and referencing!"
+
+# Appel prochain script
+# TODO: régler arguments in
+phageFind.sh name TBD TBD threads
