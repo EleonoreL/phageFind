@@ -27,7 +27,7 @@ Metagenomics tool for bacteriophage identification and investigation
     _Assesses the quality of single-contig viral genomes, including identification of host contamination for integrated proviruses, estimates completeness for genome fragments, and identifies closed genomes_
 
     ```Bash
-    conda create -n vs2 -c conda-forge -c bioconda virsorter=2 checkv
+    conda create -n vs2 -c conda-forge -c bioconda virsorter=2 checkv sra-tools megahit
     conda activate vs2
     ```
 

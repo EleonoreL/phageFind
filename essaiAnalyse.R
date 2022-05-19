@@ -19,7 +19,6 @@ hostFile <- read.table("exemple.tsv", sep = "\t", h=TRUE,
 size <- viralScore[,"TBD"]
 complete <- completeness[, "TBD"]
 dna <- viralScore[, "TBD"]
-taxo <- viralCombined[, "TBD"]
 
 
 # Assembler dans un tableau
