@@ -15,6 +15,7 @@ threads="$4"
 
 # Enlever deduplication optique avec clumpify
 	echo "=>Deduplicating reads"
+	# Fichiers input en fastq.gz
 	~/phageFind/bbmap/clumpify.sh in="$R1" in2="$R2" out="$name/0-Deduplication/$name"_deduplicated_R1.fastq out2="$name/0-Deduplication/$name"_deduplicated_R2.fastq dedupe=t optical=t dupedist=2500 -Xmx75g > "$name"/0-Deduplication/Deduplication.log 2>&1
 
 # Nombre de reads
@@ -48,7 +49,7 @@ threads="$4"
 
 #Décontamination avec bowtie2
 	echo "=>Decontaminating reads"
-	#TODO: SI VARIABLE D'ENTRÉE EST VIDE/FAUSSE, SKIP BOWTIE
+	#TODO: SI VARIABLE D'ENTRÉE EST VIDE/FAUSSE, SKIP BOWTIE ET SAMTOOLS
 	if(VARIABLE){ACTION}
 	#TODO: CHANGER PATH DE RÉFÉRENCE POUR VARIABLE D'ENTRÉE
 	bowtie2 -x /home/ulaval.ca/lugal12/projects/ul-val-prj-def-anvin26/Lucie/Westco/database/GRCg7b -1 "$name/1-Filtration/$name"_filtered_R1.fastq -2 "$name/1-Filtration/$name"_filtered_R2.fastq -S "$name/2-Decontamination/$name".sam -p "$threads" > "$name"/2-Decontamination/Decontamination.log 2>&1
@@ -89,4 +90,4 @@ threads="$4"
 
 # Appel prochain script
 # TODO: régler arguments in
-	Assembly.sh name TBD TBD threads
+	Assembly.sh name "$name/2-Decontamination/$name"_unmapped_R1.fastq "$name/2-Decontamination/$name"_unmapped_R2.fastq threads
