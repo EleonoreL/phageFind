@@ -1,0 +1,8 @@
+seqname	dsDNAphage	ssDNA	max_score	max_score_group	length	hallmark	viral	cellular
+Caudo-circular||full	0.993	0.473	0.993	dsDNAphage	31746	4	77.800	0.000
+Caudo-linear||full	1.000	0.240	1.000	dsDNAphage	13841	12	85.700	0.000
+NCLDV-linear||full	0.833	0.067	0.833	dsDNAphage	1181111	9	53.700	5.300
+ssDNA-linear||full	0.800	0.927	0.927	ssDNA	4258	0	100.000	0.000
+RNA-linear||full	0.500	0.013	0.500	dsDNAphage	5538	0	20.000	0.000
+lavidaviridae-linear||full	0.993	0.667	0.993	dsDNAphage	8598	1	44.400	0.000
+Caudo-provirus||0_partial	0.893	0.000	0.893	dsDNAphage	38206	12	26.900	15.300
