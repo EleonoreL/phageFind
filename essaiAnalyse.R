@@ -8,17 +8,18 @@
 
 #Importer fichiers résultats
 viralScore <- read.table("final-viral-score.tsv", sep = "\t", 
-                         h=TRUE, row.names = 1)
-viralCombined <- read.table("final-viral-combined.tsv", h=TRUE, 
-                            sep = "\t", row.names = 1)
+                         h=TRUE)
+viralCombined <- read.table("final-viral-combined.fa", h=TRUE, 
+                            sep = "\t")
 completeness <- read.table("completeness.tsv", sep = "\t", h=TRUE,
                            row.names = 1)
 hostFile <- read.table("exemple.tsv", sep = "\t", h=TRUE,
                        row.names = 1)
 #sélectionner colonnes nécessaires dans fichiers
-size <- viralScore[,"TBD"]
+size <- viralScore[,c(1,6)]
 complete <- completeness[, "TBD"]
-dna <- viralScore[, "TBD"]
+#Nom séquence et type ADN
+dna <- viralScore[, c(1,5)]
 
 
 # Assembler dans un tableau
