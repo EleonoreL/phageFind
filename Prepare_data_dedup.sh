@@ -88,6 +88,19 @@ threads="$4"
 	
 	echo '=>Done with reads preprocessing!'
 
+	echo "=>Creating assembly directories for $name"    
+	mkdir "$name/3-Coassembly"
+	mkdir "$name/4-Cartography"
+
+	#Noter ordre concaténation dans fichiers texte
+	ls "$name/2-Decontamination/"*R1.fastq.gz > "$name/3-Coassembly/$name"_R1_order.txt
+	ls "$name/2-Decontamination/"*R2.fastq.gz > "$name/3-Coassembly/$name"_R2_order.txt
+
+	# concaténer les R1
+	zcat "$name/2-Decontamination/"*R1.fastq.gz > "$name/3-Coassembly/$name"_R1.fastq.gz
+	#concaténer les R2
+	zcat "$name/2-Decontamination/"*R2.fastq.gz > "$name/3-Coassembly/$name"_R2.fastq.gz
+
 # Appel prochain script
-# TODO: régler arguments in
-	Assembly.sh name "$name/2-Decontamination/$name"_unmapped_R1.fastq "$name/2-Decontamination/$name"_unmapped_R2.fastq threads
+# TODO: régler arguments in, doivent être fastq
+	Assembly.sh name "$name/3-Coassembly/$name"_R1.fastq.gz "$name/3-Coassembly/$name"_R2.fastq.gz threads
