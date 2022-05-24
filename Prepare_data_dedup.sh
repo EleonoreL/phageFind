@@ -97,9 +97,9 @@ threads="$4"
 	ls "$name/2-Decontamination/"*R2.fastq.gz > "$name/3-Coassembly/$name"_R2_order.txt
 
 	# concaténer les R1
-	zcat "$name/2-Decontamination/"*R1.fastq.gz > "$name/3-Coassembly/$name"_R1.fastq.gz
+	zcat "$name/2-Decontamination/"*R1.fastq.gz > "$name/3-Coassembly/$name"_R1.fastq
 	#concaténer les R2
-	zcat "$name/2-Decontamination/"*R2.fastq.gz > "$name/3-Coassembly/$name"_R2.fastq.gz
+	zcat "$name/2-Decontamination/"*R2.fastq.gz > "$name/3-Coassembly/$name"_R2.fastq
 
 # Appel prochain script
 # TODO: régler arguments in, doivent être fastq
