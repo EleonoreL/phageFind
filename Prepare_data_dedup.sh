@@ -101,6 +101,9 @@ threads="$4"
 	#concaténer les R2
 	zcat "$name/2-Decontamination/"*R2.fastq.gz > "$name/3-Coassembly/$name"_R2.fastq
 
+	# Décomprimer fichiers fastq.gz
+	# Créer fichier liste fichiers, format csv
+
 # Appel prochain script
 # TODO: régler arguments in, doivent être fastq
 	Assembly.sh name "$name/3-Coassembly/$name"_R1.fastq.gz "$name/3-Coassembly/$name"_R2.fastq.gz threads
