@@ -1,8 +1,9 @@
-﻿Control_T12-1_DC01_unmapped_R2.fastq
-Control_T12-2_DC02_unmapped_R2.fastq
-Control_T12-3_DC03_unmapped_R2.fastq
-Control_T12-4_DC04_unmapped_R2.fastq
-Amoxicillin_T12-1_DC13_unmapped_R2.fastq
-Amoxicillin_T12-2_DC14_unmapped_R2.fastq
-Amoxicillin_T12-3_DC15_unmapped_R2.fastq
-Amoxicillin_T12-4_DC16_unmapped_R2.fastq
+"","V1"
+"1","Control_T12-1_DC01_unmapped_R2.fastq"
+"2","Control_T12-2_DC02_unmapped_R2.fastq"
+"3","Control_T12-3_DC03_unmapped_R2.fastq"
+"4","Control_T12-4_DC04_unmapped_R2.fastq"
+"5","Amoxicillin_T12-1_DC13_unmapped_R2.fastq"
+"6","Amoxicillin_T12-2_DC14_unmapped_R2.fastq"
+"7","Amoxicillin_T12-3_DC15_unmapped_R2.fastq"
+"8","Amoxicillin_T12-4_DC16_unmapped_R2.fastq"
