@@ -17,7 +17,7 @@ echo "=>Starting to predict phage sequences"
 #VirSorter2
 echo "=>Identifying phage sequences"
 #Only select phages
-virsorter run -w "$name"/5-Phages/NOMTEMP.out -i "$name"/3-Coassembly/NOMTEMP.fa -j "$threads" --include-groups "dsDNAphage,ssDNA"
+virsorter run -w "$name"/5-Phages/NOMTEMP.out -i "$name/3-Coassembly/$name.contigs.fa" -j "$threads" --include-groups "dsDNAphage,ssDNA"
 # Quality control with checkv
 echo "=>Quality control on phage sequence predictions"
 checkv end_to_end "$name"/5-Phages/NOMTEMP.out/final-viral-combined.fa checkv -t 4 -d checkv-db-v*

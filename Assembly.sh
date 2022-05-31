@@ -13,6 +13,7 @@ echo "=>Starting co-assembly of all reads"
 megahit -1 "$name/$R1".fastq -2 "$name/$R2".fastq -o "$name/3-Coassembly/$name"_assembled.out > "$name"/3-Coassembly/Coassembly.log 2>&1 # 1 paired-end library
 # if biodiversity in sample is very high (ex:soil) : --presets meta-large
 # TODO: sortir statistiques? (nb contigs, longueur, etc.)
+# TODO: supprimer contigs intermédiaires?
 
 
 # Cartographie des jeux de données sur l'assemblage
