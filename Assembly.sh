@@ -18,6 +18,8 @@ megahit -1 "$name/$R1".fastq -2 "$name/$R2".fastq -o "$name/3-Coassembly/$name"_
 
 # Cartographie des jeux de données sur l'assemblage
 echo "=>Referencing original datasets in co-assembly"
+# Idées: faire bowtie entre chaque dataset nettoyé et le résultat megahit
+# problème: indexation de la référence
 bowtie2 -x -1 -2 -S -S "$name"/4-Cartography/$name.sam -p "$threads" > "$name"/4-Cartography/Cartography.log 2>&1
 
 echo "=>Done with read assembly and referencing!"
