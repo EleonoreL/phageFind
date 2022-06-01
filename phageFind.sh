@@ -10,6 +10,7 @@ cwd=$(pwd)
 echo "=>Creating other directories for $name"    
 mkdir "$name/5-Phages"
 mkdir "$name/5-Phages/Hosts"
+mkdir "$name/5-Phages/Checkv"
 mkdir "$name/5-Phages/Caracteristics"
 
 #Trouver séquences virales phages
@@ -17,10 +18,10 @@ echo "=>Starting to predict phage sequences"
 #VirSorter2
 echo "=>Identifying phage sequences"
 #Only select phages
-virsorter run -w "$name"/5-Phages/NOMTEMP.out -i "$name/3-Coassembly/$name.contigs.fa" -j "$threads" --include-groups "dsDNAphage,ssDNA"
+virsorter run -w "$name"/5-Phages/phageSeq.out -i "$name/3-Coassembly/$name.contigs.fa" -j "$threads" --include-groups "dsDNAphage,ssDNA"
 # Quality control with checkv
 echo "=>Quality control on phage sequence predictions"
-checkv end_to_end "$name"/5-Phages/NOMTEMP.out/final-viral-combined.fa checkv -t 4 -d checkv-db-v*
+checkv end_to_end "$name"/5-Phages/phageSeq.out/final-viral-combined.fa "$name"/5-Phages/Checkv -t "$threads" -d checkv-db-v*
 
 #TODO: sortir statistiques
 

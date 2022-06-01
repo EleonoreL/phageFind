@@ -7,6 +7,7 @@
 #TODO: ajout path, imput utilisateur
 
 #Importer fichiers résultats
+# $name/5-Phages/checkv ou $name/5-Phages/phageSeq.out
 viralScore <- read.table("final-viral-score.tsv", sep = "\t", 
                          h=TRUE)
 viralCombined <- read.table("final-viral-combined.fa", h=TRUE, 
