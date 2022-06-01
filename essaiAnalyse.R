@@ -16,6 +16,7 @@ completeness <- read.table("completeness.tsv", sep = "\t", h=TRUE)
 hostFile <- read.table("exemple.tsv", sep = "\t", h=TRUE,
                        row.names = 1)
 #sélectionner colonnes nécessaires dans fichiers
+#vérifier que noms contigs sont pareils, sinon faire du awk/autre pour faire correspondre données
 size <- viralScore[,c(1,6)]
 complete <- completeness[, 5]
 #Nom séquence et type ADN
