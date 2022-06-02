@@ -12,7 +12,7 @@ viralScore <- read.table("final-viral-score.tsv", sep = "\t",
                          h=TRUE)
 viralCombined <- read.table("final-viral-combined.fa", h=TRUE, 
                             sep = "\t")
-completeness <- read.table("completeness.tsv", sep = "\t", h=TRUE)
+completeness <- read.table("completeness.tsv", sep = "\t", h=TRUE, row.names = 1)
 hostFile <- read.table("exemple.tsv", sep = "\t", h=TRUE,
                        row.names = 1)
 #sélectionner colonnes nécessaires dans fichiers

@@ -24,6 +24,16 @@ echo "=>Quality control on phage sequence predictions"
 checkv end_to_end "$name"/5-Phages/phageSeq.out/final-viral-combined.fa "$name"/5-Phages/Checkv -t "$threads" -d checkv-db-v*
 
 #TODO: sortir statistiques
+# Nb de ssDNA
+nb_ssDNA=$(grep "ssDNA" $name/5-Phages/phageSeq.out/final-viral-score.tsv)
+echo "Number of ssDNA phages: $nb_ssDNA"
+# Nb de dsDNA
+nb_dsDNA=$(grep "dsDNA" $name/5-Phages/phageSeq.out/final-viral-score.tsv)
+echo "Number of dsDNA phages: $nb_dsDNA"
+# Nb de high confidence
+nb_lowConf=$(grep -v "Low" $name/5-Phages/Checkv/quality_summary.tsv | grep -v "Not-determined"| wc -l)
+echo "Number of high confidence contigs: $nb_lowConf"
+# Nb de low confidence
 
 # Trouver hôte(s)
 #echo "=>Identifying phage hosts"
