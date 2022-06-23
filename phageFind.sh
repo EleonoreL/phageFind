@@ -19,6 +19,7 @@ echo "=>Starting to predict phage sequences"
 echo "=>Identifying phage sequences"
 #Only select phages
 virsorter run -w "$name"/5-Phages/phageSeq.out -i "$name/3-Coassembly/$name.contigs.fa" -j "$threads" --include-groups "dsDNAphage,ssDNA"
+grep -v "Low" quality_summary.tsv | grep -v "Not-determined" > high_viral_quality.tsv
 # Quality control with checkv
 echo "=>Quality control on phage sequence predictions"
 checkv end_to_end "$name"/5-Phages/phageSeq.out/final-viral-combined.fa "$name"/5-Phages/Checkv -t "$threads" -d checkv-db-v*

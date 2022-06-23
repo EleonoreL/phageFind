@@ -21,6 +21,8 @@ echo "=>Referencing original datasets in co-assembly"
 # Idées: faire bowtie entre chaque dataset nettoyé et le résultat megahit
 # problème: indexation de la référence
 bowtie2 -x -1 -2 -S -S "$name"/4-Cartography/$name.sam -p "$threads" > "$name"/4-Cartography/Cartography.log 2>&1
+bowtie2 -x refgenomes/resultEssaiCheckv -1 essai/2-Decontamination/Control_T12-3_DC03_unmapped_R1.fastq.gz -2 essai/2-Decontamination/Control_T12-3_DC03_unmapped_R2.fastq.gz -S essai/4-Mapping/Control_T12-3_DC03_mapped.sam -p 12
+screen -dmSL samtool2 samtools view -@ 12 -bS Control_T12-2_DC02_mapped.sam -o Control-T12-2_DC02_mapped.bam
 
 echo "=>Done with read assembly and referencing!"
 
