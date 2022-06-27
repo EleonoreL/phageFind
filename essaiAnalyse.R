@@ -4,28 +4,6 @@
 ###
 ###
 
-#TODO: ajout path, imput utilisateur
-
-#Importer fichiers résultats
-# $name/5-Phages/checkv ou $name/5-Phages/phageSeq.out
-viralScore <-
-  read.table("5-Phages/virsorter.out/final-viral-score.tsv",
-             sep = "\t",
-             h = TRUE)
-mapping <- read.table("4-Mapping/SAMPLE.tsv", sep = "\t", h = TRUE)
-completeness <-
-  read.table(
-    "/5-Phages/checkv/completeness.tsv",
-    sep = "\t",
-    h = TRUE,
-    row.names = 1
-  )
-hostFile <- read.table("exemple.tsv",
-                       sep = "\t",
-                       h = TRUE,
-                       row.names = 1)
-
-
 ## Importer les fichiers importants
 
 ## Fichier qui donne qualité et longueur contigs
