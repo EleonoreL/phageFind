@@ -3,7 +3,7 @@
 ### Date: 2022-05-17
 ###
 ###
-
+setwd("../../Desktop/phageFind/")
 ## Importer les fichiers importants
 
 ## Fichier qui donne qualité et longueur contigs
@@ -135,27 +135,92 @@ for (i in seq_len(nrow(Control4))) {
 highQual_Control4 <-
   highQual_Control4[order(highQual_Control4[, 1]), ]
 
+## Faire tableau entier, pas stringent
+nbAmox1 <- Amox1[, c(1, 3)]
+nbAmox2 <- Amox2[, c(1, 3)]
+nbAmox3 <- Amox3[, c(1, 3)]
+nbAmox4 <- Amox4[, c(1, 3)]
+nbTreatment <- matrix(nrow = nrow(nbAmox1), ncol = 2)
+nbTreatment[,1] <- nbAmox1[,1]
+for (i in seq_len(nrow(nbAmox1))) {
+  nbTreatment[i, 2] <-
+    paste(nbAmox1[i, 2], nbAmox2[i, 2], nbAmox3[i, 2], nbAmox4[i, 2], sep = ", ")
+}
+nbTreatment <- as.data.frame(nbTreatment)
+nbTreatment <- nbTreatment[order(nbTreatment$V1), ]
+nbTreatment <- nbTreatment[-1,]
+
+nbControl1 <- Control1[, c(1, 3)]
+nbControl2 <- Control2[, c(1, 3)]
+nbControl3 <- Control3[, c(1, 3)]
+nbControl4 <- Control4[, c(1, 3)]
+nbControl <- matrix(nrow = nrow(nbControl1), ncol = 2)
+nbControl[,1] <- nbControl1[,1]
+for (i in seq_len(nrow(nbControl1))) {
+  nbControl[i, 2] <-
+    paste(nbControl1[i, 2], nbControl2[i, 2], nbControl3[i, 2], nbControl4[i, 2], sep = ", ")
+}
+nbControl <- as.data.frame(nbControl)
+nbControl <- nbControl[order(nbControl$V1), ]
+nbControl <- nbControl[-1,]
+
+# Ordonner noms contigs
+quality <- quality[order(quality$contig_id), ]
+viralScore <- viralScore[order(viralScore$seqname), ]
+completeness <- completeness[order(completeness$contig_id), ]
+bacphlip <- bacphlip[order(bacphlip$row.names),]
+
+nomsContigs <- nbControl[,1]
+for (i in length(nomsContigs)) {
+  if ((completeness[i,1]%in% nomsContigs) == FALSE)
+    completeness <- completeness[-i,]
+}
+
 #sélectionner colonnes nécessaires dans fichiers
-size <- order_tri_lowNoQuality[, c(1, 2)]
-complete <- highQual_complete[, c(1, 5)]
+size <- quality[, c(1, 2)]
+complete <- completeness[, c(1, 5)]
 #Nom séquence et type ADN
-dna <- highQual_viralScore[, c(1, 5)]
-lytic <- matrix(nrow = nrow(highQual_bacphlip), ncol = 2)
+dna <- viralScore[, c(1, 5)]
+lytic <- matrix(nrow = nrow(bacphlip), ncol = 2)
 colnames(lytic) <- c("contig_id", "Lifestyle")
-lytic[, 1] <- highQual_bacphlip[, 1]
-for (j in seq_len(nrow(highQual_bacphlip))) {
+lytic[, 1] <- bacphlip[, 1]
+for (j in seq_len(nrow(bacphlip))) {
   #Si le contig est virulent
-  if (highQual_bacphlip[j, 2] > highQual_bacphlip[j, 3])
+  if (bacphlip[j, 2] > bacphlip[j, 3])
     lytic[j, 2] <- "Virulent"
   else
     lytic[j, 2] <- "Temperate"
 }
 lytic <- as.data.frame(lytic)
 
-for (i in seq_len(nrow(dna))) {
-  if ((dna[i, 1] %in% lytic[, 1]) == FALSE) 
-    dna <- dna[-i,]
-}
+nomsCol <-
+  c(
+    "contigID",
+    "Size",
+    "Completeness",
+    "ssDNA_dsDNA",
+    "Lifestyle",
+    "Reads_Control",
+    "Reads_Treatment"
+  )
+
+table_long <- matrix(nrow=nrow(nbControl))
+#table_long <- cbind(size, complete[,2])
+#table_long <- cbind(table_long, dna[,2])
+# setdiff(nomsContigs, lytic[,1]): "k141_189243||full_1"
+#for (i in length(nrow(nbControl))) {
+#  if (nbControl[i,1]%in%dna == FALSE) 
+#    nbControl <- nbControl[-i,]
+#}
+table_long <- cbind(size, complete[,2], dna[,2], lytic[,2], nbControl[,2], nbTreatment[,2])
+colnames(table_long) <- nomsCol
+row.names(table_long) <- seq_len(nrow(table_long))
+#write.table(table_long,file= "phageFind_long.tsv", sep="\t", fileEncoding = "UTF-8")
+
+#for (i in seq_len(nrow(dna))) {
+#  if ((dna[i, 1] %in% lytic[, 1]) == FALSE) 
+#    dna <- dna[-i,]
+#}
 
 #TODO:automatiser création colonnes selon nb échantillons, traitement et contrôle
 nbAmox1 <- highQual_Amox1[, c(1, 3)]
