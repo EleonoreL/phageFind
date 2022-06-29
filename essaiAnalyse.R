@@ -136,10 +136,10 @@ highQual_Control4 <-
   highQual_Control4[order(highQual_Control4[, 1]), ]
 
 ## Faire tableau entier, pas stringent
-nbAmox1 <- Amox1[, c(1, 3)]
-nbAmox2 <- Amox2[, c(1, 3)]
-nbAmox3 <- Amox3[, c(1, 3)]
-nbAmox4 <- Amox4[, c(1, 3)]
+nbAmox1 <- Amox1[order(Amox1$V1), c(1, 3)]
+nbAmox2 <- Amox2[order(Amox2$V1), c(1, 3)]
+nbAmox3 <- Amox3[order(Amox3$V1), c(1, 3)]
+nbAmox4 <- Amox4[order(Amox4$V1), c(1, 3)]
 nbTreatment <- matrix(nrow = nrow(nbAmox1), ncol = 2)
 nbTreatment[,1] <- nbAmox1[,1]
 for (i in seq_len(nrow(nbAmox1))) {
@@ -150,10 +150,10 @@ nbTreatment <- as.data.frame(nbTreatment)
 nbTreatment <- nbTreatment[order(nbTreatment$V1), ]
 nbTreatment <- nbTreatment[-1,]
 
-nbControl1 <- Control1[, c(1, 3)]
-nbControl2 <- Control2[, c(1, 3)]
-nbControl3 <- Control3[, c(1, 3)]
-nbControl4 <- Control4[, c(1, 3)]
+nbControl1 <- Control1[order(Control1$V1), c(1, 3)]
+nbControl2 <- Control2[order(Control2$V1), c(1, 3)]
+nbControl3 <- Control3[order(Control3$V1), c(1, 3)]
+nbControl4 <- Control4[order(Control4$V1), c(1, 3)]
 nbControl <- matrix(nrow = nrow(nbControl1), ncol = 2)
 nbControl[,1] <- nbControl1[,1]
 for (i in seq_len(nrow(nbControl1))) {
@@ -204,23 +204,91 @@ nomsCol <-
     "Reads_Treatment"
   )
 
+size_court <- size[row.names(order_tri_lowNoQuality),]
+complete_court <- complete[row.names(order_tri_lowNoQuality),]
+dna_court <- dna[row.names(order_tri_lowNoQuality),]
+lytic_court <- lytic[row.names(order_tri_lowNoQuality),]
+short_nbControl <- nbControl[row.names(order_tri_lowNoQuality),]
+short_nbTreat <- nbTreatment[row.names(order_tri_lowNoQuality),]
+table_court <-
+  cbind(
+    size_court,
+    complete_court[, 2],
+    dna_court[, 2],
+    lytic_court[, 2],
+    short_nbControl[, 2],
+    short_nbTreat[, 2]
+  )
+colnames(table_court) <- nomsCol
+row.names(table_court) <- 1:nrow(table_court)
+
+row_court <- row.names(order_tri_lowNoQuality)
+
+## Générer moyennes pour traitement
+#Treat <- c(nbAmox1$V3,nbAmox2$V3, nbAmox3$V3, nbAmox4$V3)
+Treat_court <-
+  c(nbAmox1[row_court, 2], nbAmox2[row_court, 2], nbAmox3[row_court, 2], nbAmox4[row_court, 2])
+mean_Treat_court <- data.frame()
+for (i in seq(1, length(Treat_court), 4)) {
+  temp <- c(Treat_court[i], Treat_court[i+1], Treat_court[i+2], Treat_court[i+3])
+  temp_m <- mean(temp)
+  mean_Treat_court <- rbind(mean_Treat_court,temp_m)
+}
+
+## Générer moyennes pour contrôle
+Control_court <-
+  c(nbControl1[row_court, 2], nbControl2[row_court, 2], nbControl3[row_court, 2], nbControl4[row_court, 2])
+mean_Cont_court <- data.frame()
+for (i in seq(1, length(Control_court), 4)) {
+  temp <- c(Control_court[i], Control_court[i+1], Control_court[i+2], Control_court[i+3])
+  temp_m <- mean(temp)
+  mean_Cont_court <- rbind(mean_Cont_court,temp_m)
+}
+## Faire comparaison entre contrôle et traitement
+## TODO: Peut ajuster selon paramètre
+comp_means <- c()
+for (n in 1:nrow(mean_Cont_court)) {
+  if (mean_Treat_court[n,1] > mean_Cont_court[n,1]) {
+    comp_means <- c(comp_means, "Higher")
+  }
+  else if (mean_Treat_court[n,1] < mean_Cont_court[n,1]){
+    comp_means <- c(comp_means, "Lower")
+  }
+  else {
+    comp_means <- c(comp_means, "Equivalent")
+  }
+    
+}
+comp_means <- as.data.frame(comp_means)
+colnames(comp_means) <- "Effect_treatment"
+
+table_court <- cbind(table_court, comp_means)
+#write.table(table_court,
+#            file = "Mouse_Amox_phageFind_highQuality.tsv",
+#            sep = "\t",
+#            fileEncoding = "UTF-8")
+
 table_long <- matrix(nrow=nrow(nbControl))
 #table_long <- cbind(size, complete[,2])
 #table_long <- cbind(table_long, dna[,2])
 # setdiff(nomsContigs, lytic[,1]): "k141_189243||full_1"
-#for (i in length(nrow(nbControl))) {
-#  if (nbControl[i,1]%in%dna == FALSE) 
-#    nbControl <- nbControl[-i,]
+#for (i in length(nrow(lytic))) {
+#  if (lytic[i,1]%in%dna == FALSE) 
+#    lytic <- lytic[-i,]
 #}
 table_long <- cbind(size, complete[,2], dna[,2], lytic[,2], nbControl[,2], nbTreatment[,2])
 colnames(table_long) <- nomsCol
 row.names(table_long) <- seq_len(nrow(table_long))
 #write.table(table_long,file= "phageFind_long.tsv", sep="\t", fileEncoding = "UTF-8")
 
-#for (i in seq_len(nrow(dna))) {
-#  if ((dna[i, 1] %in% lytic[, 1]) == FALSE) 
-#    dna <- dna[-i,]
-#}
+# Mettre en mode stringent
+## Sélection des contigs de bonne qualité selon checkv
+tri_lowQuality <-
+  quality[grep("Low-quality", quality[, 8], invert = TRUE), ]
+tri_lowNoQuality <-
+  tri_lowQuality[grep("Not-determined", tri_lowQuality[, 8], invert = TRUE), ]
+order_tri_lowNoQuality <-
+  tri_lowNoQuality[order(tri_lowNoQuality$contig_id), ]
 
 #TODO:automatiser création colonnes selon nb échantillons, traitement et contrôle
 nbAmox1 <- highQual_Amox1[, c(1, 3)]
