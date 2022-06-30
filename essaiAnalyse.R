@@ -8,132 +8,24 @@ setwd("../../Desktop/phageFind/")
 
 ## Fichier qui donne qualité et longueur contigs
 quality <- read.table("quality_summary.tsv", h = TRUE, sep = "\t")
-## Sélection des contigs de bonne qualité selon checkv
-tri_lowQuality <-
-  quality[grep("Low-quality", quality[, 8], invert = TRUE), ]
-tri_lowNoQuality <-
-  tri_lowQuality[grep("Not-determined", tri_lowQuality[, 8], invert = TRUE), ]
-order_tri_lowNoQuality <-
-  tri_lowNoQuality[order(tri_lowNoQuality$contig_id), ]
+order_quality <- quality[]
 
-viralScore <- read.table("final-viral-score.tsv", sep = "\t", h = TRUE)
+viralScore <-
+  read.table("final-viral-score.tsv", sep = "\t", h = TRUE)
 completeness <- read.table("completeness.tsv", sep = "\t", h = TRUE)
 bacphlip <-
   read.table("combined.fna.bacphlip", h = TRUE, row.names = NULL)
 taxo <- read.csv("genome_by_genome_overview.csv", h = TRUE)
-## Tri des contigs de bonne qualité dans autres fichiers
-highQual_viralScore <- viralScore
-for (i in seq_len(nrow(viralScore))) {
-  if ((viralScore[i, 1] %in% order_tri_lowNoQuality[, 1]) == FALSE) {
-    highQual_viralScore <- highQual_viralScore[-i, ]
-  }
-}
-highQual_viralScore <-
-  highQual_viralScore[order(highQual_viralScore$seqname), ]
-
-highQual_complete <- completeness
-for (i in seq_len(nrow(completeness))) {
-  if ((completeness[i, 1] %in% order_tri_lowNoQuality[, 1]) == FALSE) {
-    highQual_complete <- highQual_complete[-i, ]
-  }
-}
-highQual_complete <-
-  highQual_complete[order(highQual_complete$contig_id), ]
-
-highQual_bacphlip <- bacphlip
-for (i in seq_len(nrow(bacphlip))) {
-  if ((bacphlip[i, 1] %in% order_tri_lowNoQuality[, 1]) == FALSE) {
-    highQual_bacphlip <- highQual_bacphlip[-i, ]
-  }
-}
-highQual_bacphlip <-
-  highQual_bacphlip[order(highQual_bacphlip[, 1]), ]
-
-##highQual_taxo <- taxo
-##for (i in seq_len(nrow(taxo))) {
-##  if ((taxo[i,1]%in%order_tri_lowNoQuality[,1])==FALSE){
-##    highQual_taxo <- highQual_taxo[-i,]
-##  }
-##}
-##highQual_taxo <- highQual_taxo[order(highQual_taxo[,1]),]
-
 
 Amox1 <- read.table("Amoxicillin_T12-1_DC13.tsv", t = "\t")
-highQual_Amox1 <- Amox1
-for (i in seq_len(nrow(Amox1))) {
-  if ((Amox1[i, 1] %in% order_tri_lowNoQuality[, 1]) == FALSE) {
-    highQual_Amox1 <- highQual_Amox1[-i, ]
-  }
-}
-highQual_Amox1 <- highQual_Amox1[order(highQual_Amox1[, 1]), ]
-
 Amox2 <- read.table("Amoxicillin_T12-2_DC14.tsv", t = "\t")
-highQual_Amox2 <- Amox2
-for (i in seq_len(nrow(Amox2))) {
-  if ((Amox2[i, 1] %in% order_tri_lowNoQuality[, 1]) == FALSE) {
-    highQual_Amox2 <- highQual_Amox2[-i, ]
-  }
-}
-highQual_Amox2 <- highQual_Amox2[order(highQual_Amox2[, 1]), ]
-
 Amox3 <- read.table("Amoxicillin_T12-3_DC15.tsv", t = "\t")
-highQual_Amox3 <- Amox3
-for (i in seq_len(nrow(Amox3))) {
-  if ((Amox3[i, 1] %in% order_tri_lowNoQuality[, 1]) == FALSE) {
-    highQual_Amox3 <- highQual_Amox3[-i, ]
-  }
-}
-highQual_Amox3 <- highQual_Amox3[order(highQual_Amox3[, 1]), ]
-
 Amox4 <- read.table("Amoxicillin_T12-4_DC16.tsv", t = "\t")
-highQual_Amox4 <- Amox4
-for (i in seq_len(nrow(Amox4))) {
-  if ((Amox4[i, 1] %in% order_tri_lowNoQuality[, 1]) == FALSE) {
-    highQual_Amox4 <- highQual_Amox4[-i, ]
-  }
-}
-highQual_Amox4 <- highQual_Amox4[order(highQual_Amox4[, 1]), ]
 
 Control1 <- read.table("Control_T12-1_DC01.tsv", sep = "\t")
-highQual_Control1 <- Control1
-for (i in seq_len(nrow(Control1))) {
-  if ((Control1[i, 1] %in% order_tri_lowNoQuality[, 1]) == FALSE) {
-    highQual_Control1 <- highQual_Control1[-i, ]
-  }
-}
-highQual_Control1 <-
-  highQual_Control1[order(highQual_Control1[, 1]), ]
-
 Control2 <- read.table("Control_T12-2_DC02.tsv", sep = "\t")
-highQual_Control2 <- Control2
-for (i in seq_len(nrow(Control2))) {
-  if ((Control2[i, 1] %in% order_tri_lowNoQuality[, 1]) == FALSE) {
-    highQual_Control2 <- highQual_Control2[-i, ]
-  }
-}
-highQual_Control2 <-
-  highQual_Control2[order(highQual_Control2[, 1]), ]
-
 Control3 <- read.table("Control_T12-3_DC03.tsv", sep = "\t")
-highQual_Control3 <- Control3
-for (i in seq_len(nrow(Control3))) {
-  if ((Control3[i, 1] %in% order_tri_lowNoQuality[, 1]) == FALSE) {
-    highQual_Control3 <- highQual_Control3[-i, ]
-  }
-}
-highQual_Control3 <-
-  highQual_Control3[order(highQual_Control3[, 1]), ]
-
-
 Control4 <- read.table("Control_T12-4_DC04.tsv", sep = "\t")
-highQual_Control4 <- Control4
-for (i in seq_len(nrow(Control4))) {
-  if ((Control4[i, 1] %in% order_tri_lowNoQuality[, 1]) == FALSE) {
-    highQual_Control4 <- highQual_Control4[-i,]
-  }
-}
-highQual_Control4 <-
-  highQual_Control4[order(highQual_Control4[, 1]), ]
 
 ## Faire tableau entier, pas stringent
 nbAmox1 <- Amox1[order(Amox1$V1), c(1, 3)]
@@ -141,39 +33,39 @@ nbAmox2 <- Amox2[order(Amox2$V1), c(1, 3)]
 nbAmox3 <- Amox3[order(Amox3$V1), c(1, 3)]
 nbAmox4 <- Amox4[order(Amox4$V1), c(1, 3)]
 nbTreatment <- matrix(nrow = nrow(nbAmox1), ncol = 2)
-nbTreatment[,1] <- nbAmox1[,1]
+nbTreatment[, 1] <- nbAmox1[, 1]
 for (i in seq_len(nrow(nbAmox1))) {
   nbTreatment[i, 2] <-
     paste(nbAmox1[i, 2], nbAmox2[i, 2], nbAmox3[i, 2], nbAmox4[i, 2], sep = ", ")
 }
 nbTreatment <- as.data.frame(nbTreatment)
-nbTreatment <- nbTreatment[order(nbTreatment$V1), ]
-nbTreatment <- nbTreatment[-1,]
+nbTreatment <- nbTreatment[order(nbTreatment$V1),]
+nbTreatment <- nbTreatment[-1, ]
 
 nbControl1 <- Control1[order(Control1$V1), c(1, 3)]
 nbControl2 <- Control2[order(Control2$V1), c(1, 3)]
 nbControl3 <- Control3[order(Control3$V1), c(1, 3)]
 nbControl4 <- Control4[order(Control4$V1), c(1, 3)]
 nbControl <- matrix(nrow = nrow(nbControl1), ncol = 2)
-nbControl[,1] <- nbControl1[,1]
+nbControl[, 1] <- nbControl1[, 1]
 for (i in seq_len(nrow(nbControl1))) {
   nbControl[i, 2] <-
     paste(nbControl1[i, 2], nbControl2[i, 2], nbControl3[i, 2], nbControl4[i, 2], sep = ", ")
 }
 nbControl <- as.data.frame(nbControl)
-nbControl <- nbControl[order(nbControl$V1), ]
-nbControl <- nbControl[-1,]
+nbControl <- nbControl[order(nbControl$V1),]
+nbControl <- nbControl[-1, ]
 
 # Ordonner noms contigs
-quality <- quality[order(quality$contig_id), ]
-viralScore <- viralScore[order(viralScore$seqname), ]
-completeness <- completeness[order(completeness$contig_id), ]
-bacphlip <- bacphlip[order(bacphlip$row.names),]
+quality <- quality[order(quality$contig_id),]
+viralScore <- viralScore[order(viralScore$seqname),]
+completeness <- completeness[order(completeness$contig_id),]
+bacphlip <- bacphlip[order(bacphlip$row.names), ]
 
-nomsContigs <- nbControl[,1]
+nomsContigs <- nbControl[, 1]
 for (i in length(nomsContigs)) {
-  if ((completeness[i,1]%in% nomsContigs) == FALSE)
-    completeness <- completeness[-i,]
+  if ((completeness[i, 1] %in% nomsContigs) == FALSE)
+    completeness <- completeness[-i, ]
 }
 
 #sélectionner colonnes nécessaires dans fichiers
@@ -204,12 +96,20 @@ nomsCol <-
     "Reads_Treatment"
   )
 
-size_court <- size[row.names(order_tri_lowNoQuality),]
-complete_court <- complete[row.names(order_tri_lowNoQuality),]
-dna_court <- dna[row.names(order_tri_lowNoQuality),]
-lytic_court <- lytic[row.names(order_tri_lowNoQuality),]
-short_nbControl <- nbControl[row.names(order_tri_lowNoQuality),]
-short_nbTreat <- nbTreatment[row.names(order_tri_lowNoQuality),]
+## Sélection des contigs de bonne qualité selon checkv
+tri_lowQuality <-
+  quality[grep("Low-quality", quality[, 8], invert = TRUE),]
+tri_lowNoQuality <-
+  tri_lowQuality[grep("Not-determined", tri_lowQuality[, 8], invert = TRUE),]
+order_tri_lowNoQuality <-
+  tri_lowNoQuality[order(tri_lowNoQuality$contig_id),]
+
+size_court <- size[row.names(order_tri_lowNoQuality), ]
+complete_court <- complete[row.names(order_tri_lowNoQuality), ]
+dna_court <- dna[row.names(order_tri_lowNoQuality), ]
+lytic_court <- lytic[row.names(order_tri_lowNoQuality), ]
+short_nbControl <- nbControl[row.names(order_tri_lowNoQuality), ]
+short_nbTreat <- nbTreatment[row.names(order_tri_lowNoQuality), ]
 table_court <-
   cbind(
     size_court,
@@ -230,9 +130,11 @@ Treat_court <-
   c(nbAmox1[row_court, 2], nbAmox2[row_court, 2], nbAmox3[row_court, 2], nbAmox4[row_court, 2])
 mean_Treat_court <- data.frame()
 for (i in seq(1, length(Treat_court), 4)) {
-  temp <- c(Treat_court[i], Treat_court[i+1], Treat_court[i+2], Treat_court[i+3])
+  temp <-
+    c(Treat_court[i], Treat_court[i + 1], Treat_court[i + 2], Treat_court[i +
+                                                                            3])
   temp_m <- mean(temp)
-  mean_Treat_court <- rbind(mean_Treat_court,temp_m)
+  mean_Treat_court <- rbind(mean_Treat_court, temp_m)
 }
 
 ## Générer moyennes pour contrôle
@@ -240,24 +142,28 @@ Control_court <-
   c(nbControl1[row_court, 2], nbControl2[row_court, 2], nbControl3[row_court, 2], nbControl4[row_court, 2])
 mean_Cont_court <- data.frame()
 for (i in seq(1, length(Control_court), 4)) {
-  temp <- c(Control_court[i], Control_court[i+1], Control_court[i+2], Control_court[i+3])
+  temp <-
+    c(Control_court[i],
+      Control_court[i + 1],
+      Control_court[i + 2],
+      Control_court[i + 3])
   temp_m <- mean(temp)
-  mean_Cont_court <- rbind(mean_Cont_court,temp_m)
+  mean_Cont_court <- rbind(mean_Cont_court, temp_m)
 }
 ## Faire comparaison entre contrôle et traitement
 ## TODO: Peut ajuster selon paramètre
 comp_means <- c()
 for (n in 1:nrow(mean_Cont_court)) {
-  if (mean_Treat_court[n,1] > mean_Cont_court[n,1]) {
+  if (mean_Treat_court[n, 1] > mean_Cont_court[n, 1]) {
     comp_means <- c(comp_means, "Higher")
   }
-  else if (mean_Treat_court[n,1] < mean_Cont_court[n,1]){
+  else if (mean_Treat_court[n, 1] < mean_Cont_court[n, 1]) {
     comp_means <- c(comp_means, "Lower")
   }
   else {
     comp_means <- c(comp_means, "Equivalent")
   }
-    
+  
 }
 comp_means <- as.data.frame(comp_means)
 colnames(comp_means) <- "Effect_treatment"
@@ -268,100 +174,19 @@ table_court <- cbind(table_court, comp_means)
 #            sep = "\t",
 #            fileEncoding = "UTF-8")
 
-table_long <- matrix(nrow=nrow(nbControl))
+table_long <- matrix(nrow = nrow(nbControl))
 #table_long <- cbind(size, complete[,2])
 #table_long <- cbind(table_long, dna[,2])
 # setdiff(nomsContigs, lytic[,1]): "k141_189243||full_1"
 #for (i in length(nrow(lytic))) {
-#  if (lytic[i,1]%in%dna == FALSE) 
+#  if (lytic[i,1]%in%dna == FALSE)
 #    lytic <- lytic[-i,]
 #}
-table_long <- cbind(size, complete[,2], dna[,2], lytic[,2], nbControl[,2], nbTreatment[,2])
+table_long <-
+  cbind(size, complete[, 2], dna[, 2], lytic[, 2], nbControl[, 2], nbTreatment[, 2])
 colnames(table_long) <- nomsCol
 row.names(table_long) <- seq_len(nrow(table_long))
 #write.table(table_long,file= "phageFind_long.tsv", sep="\t", fileEncoding = "UTF-8")
-
-# Mettre en mode stringent
-## Sélection des contigs de bonne qualité selon checkv
-tri_lowQuality <-
-  quality[grep("Low-quality", quality[, 8], invert = TRUE), ]
-tri_lowNoQuality <-
-  tri_lowQuality[grep("Not-determined", tri_lowQuality[, 8], invert = TRUE), ]
-order_tri_lowNoQuality <-
-  tri_lowNoQuality[order(tri_lowNoQuality$contig_id), ]
-
-#TODO:automatiser création colonnes selon nb échantillons, traitement et contrôle
-nbAmox1 <- highQual_Amox1[, c(1, 3)]
-nbAmox2 <- highQual_Amox2[, c(1, 3)]
-nbAmox3 <- highQual_Amox3[, c(1, 3)]
-nbAmox4 <- highQual_Amox4[, c(1, 3)]
-nbTreatment <- matrix(nrow = nrow(nbAmox1), ncol = 2)
-nbTreatment[,1] <- nbAmox1[,1]
-for (i in seq_len(nrow(nbAmox1))) {
-  nbTreatment[i, 2] <-
-    paste(nbAmox1[i, 2], nbAmox2[i, 2], nbAmox3[i, 2], nbAmox4[i, 2], sep = ", ")
-}
-nbTreatment <- as.data.frame(nbTreatment)
-
-nbControl1 <- highQual_Control1[, c(1, 3)]
-nbControl2 <- highQual_Control2[, c(1, 3)]
-nbControl3 <- highQual_Control3[, c(1, 3)]
-nbControl4 <- highQual_Control4[, c(1, 3)]
-nbControl <- matrix(nrow = nrow(nbControl1), ncol = 2)
-nbControl[,1] <- nbControl1[,1]
-for (i in seq_len(nrow(nbControl1))) {
-  nbControl[i, 2] <-
-    paste(nbControl1[i, 2], nbControl2[i, 2], nbControl3[i, 2], nbControl4[i, 2], sep = ", ")
-}
-nbControl <- as.data.frame(nbControl)
-  
-# Assembler dans un tableau
-for (i in seq_len(nrow(nbControl))) {
-  if ((nbControl[i, 1] %in% lytic[, 1]) == FALSE) {
-    nbControl <- nbControl[-i,]
-  }
-}
-for (i in seq_len(nrow(nbControl))) {
-  if ((nbControl[i, 1] %in% complete[, 1]) == FALSE) {
-    nbControl <- nbControl[-i,]
-  }
-}
-
-for (i in seq_len(nrow(nbControl))) {
-  if ((nbControl[i, 1] %in% dna[, 1]) == FALSE) {
-    nbControl <- nbControl[-i,]
-  }
-}
-
-
-for (i in seq_len(nrow(nbTreatment))) {
-  if ((nbTreatment[i, 1] %in% nbControl[, 1]) == FALSE) {
-    nbTreatment <- nbTreatment[-i,]
-  }
-}
-
-
-nomsCol <-
-  c(
-    "contigID",
-    "Size",
-    "Completeness",
-    "ssDNA_dsDNA",
-    "Lifestyle",
-    "Reads_Control",
-    "Reads_Treatment"
-  ) #"Taxonomy",Host
-table_essai <-
-  cbind(#complete[, c(1,2)],
-        #dna[, 2],
-        #lytic[, 2],
-        nbControl[, 2],
-        nbTreatment[, 2])
-
-
-combinee <- cbind(size, complete, dna)
-colnames(combinee) <- nomsCol
-#row.names(combinee) <- row.names(viralCombined)
 
 # Statistiques de bases
 
