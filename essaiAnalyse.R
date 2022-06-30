@@ -8,7 +8,6 @@ setwd("../../Desktop/phageFind/")
 
 ## Fichier qui donne qualité et longueur contigs
 quality <- read.table("quality_summary.tsv", h = TRUE, sep = "\t")
-order_quality <- quality[]
 
 viralScore <-
   read.table("final-viral-score.tsv", sep = "\t", h = TRUE)
@@ -62,12 +61,6 @@ viralScore <- viralScore[order(viralScore$seqname),]
 completeness <- completeness[order(completeness$contig_id),]
 bacphlip <- bacphlip[order(bacphlip$row.names), ]
 
-nomsContigs <- nbControl[, 1]
-for (i in length(nomsContigs)) {
-  if ((completeness[i, 1] %in% nomsContigs) == FALSE)
-    completeness <- completeness[-i, ]
-}
-
 #sélectionner colonnes nécessaires dans fichiers
 size <- quality[, c(1, 2)]
 complete <- completeness[, c(1, 5)]
@@ -103,7 +96,36 @@ tri_lowNoQuality <-
   tri_lowQuality[grep("Not-determined", tri_lowQuality[, 8], invert = TRUE),]
 order_tri_lowNoQuality <-
   tri_lowNoQuality[order(tri_lowNoQuality$contig_id),]
+order_quality <- quality[order(quality$contig_id),]
 
+## Sélection des contigs - Non stringent
+size_long <- size[row.names(order_quality), ]
+complete_long <- complete[row.names(order_quality), ]
+dna_long <- dna[row.names(order_quality), ]
+lytic_long <- lytic[row.names(order_quality), ]
+long_nbControl <- nbControl[row.names(order_quality), ]
+long_nbTreat <- nbTreatment[row.names(order_quality), ]
+table_long <-
+  cbind(
+    size_long,
+    complete_long[, 2],
+    dna_long[, 2],
+    lytic_long[, 2],
+    long_nbControl[, 2],
+    long_nbTreat[, 2]
+  )
+colnames(table_long) <- nomsCol
+row.names(table_long) <- 1:nrow(table_long)
+
+row_long <- row.names(order_quality)
+
+#write.table(table_long,
+#            file = "Mouse_Amox_phageFind_all.tsv",
+#            sep = "\t",
+#            fileEncoding = "UTF-8")
+
+
+## Sélection des contigs de haute qualité - Stringent
 size_court <- size[row.names(order_tri_lowNoQuality), ]
 complete_court <- complete[row.names(order_tri_lowNoQuality), ]
 dna_court <- dna[row.names(order_tri_lowNoQuality), ]
