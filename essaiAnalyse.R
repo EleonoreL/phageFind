@@ -14,7 +14,7 @@ viralScore <-
 completeness <- read.table("completeness.tsv", sep = "\t", h = TRUE)
 bacphlip <-
   read.table("combined.fna.bacphlip", h = TRUE, row.names = NULL)
-taxo <- read.csv("genome_by_genome_overview.csv", h = TRUE)
+taxo <- read.csv("essai2/genome_by_genome_overview.csv", h = TRUE)
 
 Amox1 <- read.table("Amoxicillin_T12-1_DC13.tsv", t = "\t")
 Amox2 <- read.table("Amoxicillin_T12-2_DC14.tsv", t = "\t")
@@ -54,6 +54,38 @@ for (i in seq_len(nrow(nbControl1))) {
 nbControl <- as.data.frame(nbControl)
 nbControl <- nbControl[order(nbControl$V1),]
 nbControl <- nbControl[-1, ]
+
+# Taxonomie
+# Sélectionner les contigs des échantillons
+taxo_contigs <- taxo[row.names(taxo[grep('k141', taxo$Genome),]),]
+# Sélectionner les contigs de la BD de référence
+taxo_db <- taxo[row.names(taxo[grep('k141', taxo$Genome, invert = TRUE),]),]
+# Sélectionner les contigs ayant un match
+taxo_contig_match <- taxo_contigs[row.names(taxo_contigs[grep('VC', taxo_contigs$VC),]),]
+taxo_db_match <- taxo_db[row.names(taxo_db[grep('VC', taxo_db$VC),]),]
+#Nettoyage noms rangées
+row.names(taxo_db_match) <- seq_len(nrow(taxo_db_match))
+row.names(taxo_contig_match) <- seq_len(nrow(taxo_contig_match))
+## Faire correspondre db et échantillons
+taxo_match_VC <- taxo_contig_match
+# TODO: améliorer efficacité de la boucle
+# Pour chaque rangée du tableau d'échantillons
+for (i in 1:nrow(taxo_contig_match)) {
+  # Pour chaque rangée du tableau db
+  for (j in 1:nrow(taxo_db_match)) {
+    # Si leur VC est identique
+    if (taxo_contig_match[i, 7] == taxo_db_match[j, 7]) {
+      # Mettre taxonomie de référence dans tableau d'échantillons
+      taxo_match_VC[i, 2:4] <- taxo_db_match[j, 2:4]
+    }
+  }
+}
+
+# Conserver que ceux assignés
+taxo_match <- taxo_match_VC[row.names(taxo_match_VC[grep('Unassigned', taxo_match_VC, invert = TRUE),]),]
+
+# Sélectionner pour tableau stringent
+
 
 # Ordonner noms contigs
 quality <- quality[order(quality$contig_id),]
@@ -147,6 +179,58 @@ row.names(table_court) <- 1:nrow(table_court)
 row_court <- row.names(order_tri_lowNoQuality)
 
 ## Générer moyennes pour traitement
+
+# Enlever row inutile
+nbAmox1_clean <- nbAmox1[-1,]
+nbAmox2_clean <- nbAmox2[-1,]
+nbAmox3_clean <- nbAmox3[-1,]
+nbAmox4_clean <- nbAmox4[-1,]
+Treat_court <-
+  c(nbAmox1_clean[row_court, 2],
+    nbAmox2_clean[row_court, 2],
+    nbAmox3_clean[row_court, 2],
+    nbAmox4_clean[row_court, 2])
+mean_Treat_court <- data.frame()
+for (i in seq(1, length(Treat_court), 4)) {
+  temp <-
+    c(Treat_court[i], Treat_court[i + 1], Treat_court[i + 2], Treat_court[i +
+                                                                            3])
+  temp_m <- mean(temp)
+  mean_Treat_court <- rbind(mean_Treat_court, temp_m)
+}
+
+
+## Générer moyennes pour contrôle
+# Enlever row inutile
+nbCont1_clean <- nbControl1[-1,]
+nbCont2_clean <- nbControl2[-1,]
+nbCont3_clean <- nbControl3[-1,]
+nbCont4_clean <- nbControl4[-1,]
+Control_court <-
+  c(nbCont1_clean[row_court, 2],
+    nbCont2_clean[row_court, 2],
+    nbCont3_clean[row_court, 2],
+    nbCont4_clean[row_court, 2])
+mean_Cont_court <- data.frame()
+for (i in seq(1, length(Control_court), 4)) {
+  temp <-
+    c(Control_court[i], Control_court[i + 1], Control_court[i + 2], Control_court[i +
+                                                                            3])
+  temp_m <- mean(temp)
+  mean_Cont_court <- rbind(mean_Cont_court, temp_m)
+}
+
+diff_mean <- mean_Treat_court - mean_Cont_court
+ratio_mean <- mean_Treat_court/mean_Cont_court
+
+
+
+
+
+
+
+
+
 #Treat <- c(nbAmox1$V3,nbAmox2$V3, nbAmox3$V3, nbAmox4$V3)
 Treat_court <-
   c(nbAmox1[row_court, 2], nbAmox2[row_court, 2], nbAmox3[row_court, 2], nbAmox4[row_court, 2])
