@@ -1,8 +1,7 @@
 ### Main workflow - phageFind
 
 
-# ---- Global variables ---- #
-
+configfile: "config.yaml"
 # ---- Rules ---- #
 rule all:
     input:
@@ -46,7 +45,7 @@ rule create_index:
     threads:
     message: "=> Creating a bowtie index from the viral sequences."
     shell:
-
+# TODO: COMBINER AVEC PIPE? VOIR SI SE FAIT 
 rule sample_indexing:
     input:
     output:
