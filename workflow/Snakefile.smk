@@ -2,6 +2,7 @@
 
 
 configfile: "config.yaml"
+
 # ---- Rules ---- #
 rule all:
     input:
@@ -12,6 +13,7 @@ rule cleaning:
     log: 
     threads:
     message: "=> Decontaminating all reads."
+    script: "Prepare_data_dedup.sh"
     shell:
 
 rule megahit:
