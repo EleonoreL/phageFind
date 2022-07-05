@@ -12,6 +12,7 @@ rule cleaning:
     output:
     log: 
     threads:
+    message: "=> Decontaminating all reads."
     shell:
 
 rule megahit:
@@ -19,6 +20,7 @@ rule megahit:
     output:
     log:
     threads:
+    message: "=> Performing coassembly with megahit."
     shell:
 
 rule virsorter2:
@@ -26,6 +28,7 @@ rule virsorter2:
     output:
     log:
     threads:
+    message: "=> Finding viral sequences with virsorter2."
     shell:
 
 rule checkv:
@@ -33,6 +36,7 @@ rule checkv:
     output:
     log:
     threads:
+    message: "=> Performing a quality check on virsorter results with checkv."
     shell:
 
 rule create_index:
@@ -40,6 +44,7 @@ rule create_index:
     output:
     log:
     threads:
+    message: "=> Creating a bowtie index from the viral sequences."
     shell:
 
 rule sample_indexing:
@@ -47,6 +52,7 @@ rule sample_indexing:
     output:
     log:
     threads:
+    message: "=> Indexing all cleaned samples with bowtie2."
     shell:
     
 rule transform_bam:
@@ -54,6 +60,7 @@ rule transform_bam:
     output:
     log:
     threads:
+    message: "=> Compressing the .sam files into .bam."
     shell:
 
 rule bam_sorting:
@@ -61,6 +68,7 @@ rule bam_sorting:
     output:
     log:
     threads:
+    message: "=> Sorting the .bam files."
     shell:
 
 rule bam_indexing:
@@ -68,6 +76,7 @@ rule bam_indexing:
     output:
     log:
     threads:
+    message: "=> Indexing the sorted bam files."
     shell:
 
 rule bam_stats:
@@ -75,6 +84,7 @@ rule bam_stats:
     output:
     log:
     threads:
+    message: "=> Getting the number of reads of each contig per sample."
     shell:
 
 rule prodigal:
@@ -82,6 +92,7 @@ rule prodigal:
     output:
     log:
     threads:
+    message: "=> Running prodigal."
     shell:
 
 rule gene2genome:
@@ -89,6 +100,7 @@ rule gene2genome:
     output:
     log:
     threads:
+    message: "=> Creating the gene-to-genome index for vcontact2."
     shell:
 
 rule vcontact2:
@@ -96,6 +108,7 @@ rule vcontact2:
     output:
     log:
     threads:
+    message: "=> Performing taxonomic identification with vconact2."
     shell:
 
 rule bacphlip:
@@ -103,6 +116,7 @@ rule bacphlip:
     output:
     log:
     threads:
+    message: "=> Performing lifestyle prediction with bacphlip."
     shell:
 
 rule finalTable:
@@ -110,5 +124,6 @@ rule finalTable:
     output:
     log:
     threads:
+    message: "=> Creating the final table with all important information."
     shell:
     
