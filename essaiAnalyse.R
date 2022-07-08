@@ -3,7 +3,7 @@
 ### Date: 2022-05-17
 ###
 ###
-setwd("../../Desktop/phageFind/")
+setwd("../../Desktop/phageFind/test_mouse/")
 ## Importer les fichiers importants
 
 ## Fichier qui donne qualité et longueur contigs
@@ -14,7 +14,7 @@ viralScore <-
 completeness <- read.table("completeness.tsv", sep = "\t", h = TRUE)
 bacphlip <-
   read.table("combined.fna.bacphlip", h = TRUE, row.names = NULL)
-taxo <- read.csv("essai2/genome_by_genome_overview.csv", h = TRUE)
+taxo <- read.csv("../essai2/genome_by_genome_overview.csv", h = TRUE)
 
 Amox1 <- read.table("Amoxicillin_T12-1_DC13.tsv", t = "\t")
 Amox2 <- read.table("Amoxicillin_T12-2_DC14.tsv", t = "\t")
@@ -72,11 +72,11 @@ taxo_match_VC <- taxo_contig_match
 # Pour chaque rangée du tableau d'échantillons
 for (i in 1:nrow(taxo_contig_match)) {
   # Pour chaque rangée du tableau db
-  for (j in 1:nrow(taxo_db_match)) {
+  for (j in 1:nrow(taxo_db)) {
     # Si leur VC est identique
-    if (taxo_contig_match[i, 7] == taxo_db_match[j, 7]) {
+    if (taxo_contig_match[i, 7] == taxo_db[j, 7]) {
       # Mettre taxonomie de référence dans tableau d'échantillons
-      taxo_match_VC[i, 2:4] <- taxo_db_match[j, 2:4]
+      taxo_match_VC[i, 2:4] <- taxo_db[j, 2:4]
     }
   }
 }

@@ -1,5 +1,6 @@
 ### Main workflow - phageFind
 
+report: "workflow/report/workflow.rst"
 
 configfile: "config.yaml"
 
