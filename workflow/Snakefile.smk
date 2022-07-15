@@ -59,52 +59,50 @@ rule checkv:
         shell("cat output.provir output.vir_checkv > output.combined")
 
 rule create_index:
-    input:
+    input:#  output de netttoyage
     output:
     log:
     threads:
     message: "=> Creating a bowtie index from the viral sequences."
-    shell:
+    run: 
+        shell("bowtie2-build rules.checkv.output.combined database-{project}")
+        # Faire boucle? voir
+        shell("bowtie2 -x database-{project} -1 SAMPLE_unmapped_R1.fastq.gz **OUTPUT DE NETTOYAGE_R1** -2 SAMPLE_unmapped_R2.fastq.gz **OUTPUT DE NETTOYAGE R2** -S {project}/4-Mapping/NAME.sam -p {threads}")
 # TODO: COMBINER AVEC PIPE? VOIR SI SE FAIT 
 rule sample_indexing:
-    input:
+    input: 
     output:
     log:
     threads:
     message: "=> Indexing all cleaned samples with bowtie2."
     shell:
+    ## Commandes par A.Vincent
+    #samtools view -@ 30 -bS test.sam -o test.bam                     
+    #samtools sort -@ 30 test.bam -o test_sorted.bam                  
+    #samtools index -@ 30 test_sorted.bam
+    #samtools idxstats test_sorted.bam > test.tsv
     
 rule transform_bam:
     input:
-    output:
-    log:
+    output: 
+            unsorted="{project}/4-Mapping/NAME.bam",
+            sorted_bam="{project}/4-Mapping/NAME_sorted.bam"
+    log: "{project}/4-Mapping/bam_sorting.log"
     threads:
     message: "=> Compressing the .sam files into .bam."
-    shell:
-
-rule bam_sorting:
-    input:
-    output:
-    log:
-    threads:
-    message: "=> Sorting the .bam files."
-    shell:
-
-rule bam_indexing:
-    input:
-    output:
-    log:
-    threads:
-    message: "=> Indexing the sorted bam files."
-    shell:
+    run: 
+        shell("samtools view -@ {threads} -bS {input} -o ouput.unsorted > {log} 2>&1")
+        shell("samtools sort -@ {threads} output.unsorted -o output.sorted_bam > {log} 2>&1")
 
 rule bam_stats:
-    input:
-    output:
-    log:
+    input: rules.transform_bam.output.sorted_bam
+    output: "{project}/4-Mapping/NAMES.tsv"
+    log: "{project}/4-Mapping/bam_stats.log"
     threads:
     message: "=> Getting the number of reads of each contig per sample."
-    shell:
+    run: 
+        shell("samtools index -@ {threads} {input} > {log} 2>&1")
+        shell("samtools idxstats {input} > {output}")
 
 rule prodigal:
     input:
