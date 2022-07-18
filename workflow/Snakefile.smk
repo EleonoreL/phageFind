@@ -85,11 +85,11 @@ rule sample_indexing:
 rule transform_bam:
     input:
     output: 
-            unsorted="{project}/4-Mapping/NAME.bam",
-            sorted_bam="{project}/4-Mapping/NAME_sorted.bam"
+        unsorted="{project}/4-Mapping/NAME.bam",
+        sorted_bam="{project}/4-Mapping/NAME_sorted.bam"
     log: "{project}/4-Mapping/bam_sorting.log"
     threads:
-    message: "=> Compressing the .sam files into .bam."
+    message: "=> Compressing the sam files into bam and sorting them."
     run: 
         shell("samtools view -@ {threads} -bS {input} -o ouput.unsorted > {log} 2>&1")
         shell("samtools sort -@ {threads} output.unsorted -o output.sorted_bam > {log} 2>&1")
@@ -105,39 +105,47 @@ rule bam_stats:
         shell("samtools idxstats {input} > {output}")
 
 rule prodigal:
-    input:
-    output:
-    log:
+    input: rules.checkv.output.combined
+    output: 
+        genes_out="{project}/6-Prodigal/{project}_output.genes",
+        proteins_out="{project}/6-Prodigal/proteins_{project}.faa",
+        poten_genes="{project}/6-Prodigal/{project}_potential_genes.txt"
+    log: "{project}/6-Prodigal/prodigal.log"
     threads:
     message: "=> Running prodigal."
-    shell:
+    shell: "prodigal -i {input} -o output.genes_out -a output.proteins_out -p meta -s output.poten_genes > {log} 2>&1"
 
 rule gene2genome:
-    input:
-    output:
-    log:
+    input: rules.prodigal.output.proteins_out
+    output: "{project}/5-Phages/Taxonomy/{project}_gene2genome.csv"
+    log: "{project}/5-Phages/Taxonomy/gene2genome.log"
     threads:
     message: "=> Creating the gene-to-genome index for vcontact2."
-    shell:
+    shell: "vcontact2_gene2genome -p rules.prodigal.output.proteins_out -o {output} -s 'Prodigal-FAA' > {log} 2>&1"
 
 rule vcontact2:
-    input:
-    output:
-    log:
+    input: rules.prodigal.output.proteins_out, rules.gene2genome.output
+    output: "{project}/5-Phages/Taxonomy/genome_by_genome_overview.csv"
+    log: "{project}/5-Phages/Taxonomy/vcontact.log"
     threads:
-    message: "=> Performing taxonomic identification with vconact2."
-    shell:
+    message: "=> Performing taxonomic identification with vContact2."
+    shell: "vcontact2 --raw-proteins rules.prodigal.output.proteins_out -t {threads} --rel-mode 'Diamond' --proteins-fp rules.gene2genome.output -f -o {project}/5-Phages/Taxonomy/ > {log} 2>&1"
 
 rule bacphlip:
-    input:
-    output:
-    log:
+    input: rules.checkv.output.combined
+    output: "{project}/5-Phages/Lifestyle/combined.fna.bacphlip" # TODO: vérifier si doit mettre dans ligne de commande le déplacement
+    log: "{project}/5-Phages/Lifestyle/bacphlip.log"
     threads:
     message: "=> Performing lifestyle prediction with bacphlip."
-    shell:
+    shell: "bacphlip -i {input} --multi_fasta -f --local_hmmsearch ***PATH_TO_HMMSEARCH*** > {log} 2>&1" 
 
 rule finalTable:
-    input:
+    input: 
+        taxo="{project}/7-Taxonomy/genome_by_genome_overview.csv",
+        rules.checkv.output.quality,
+        rules.checkv.output.complete,
+        rules.bacphlip.output,
+        rules.bam_stats.output        
     output:
     log:
     threads:
