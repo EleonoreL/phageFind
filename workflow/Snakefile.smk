@@ -10,13 +10,14 @@ rule all:
 
 ## TODO:Faire un autre fichier snakemake avec sous-règles pour nettoyage
 ## TODO: Gérer installation des bases de données
+## TODO: vérifier nb de threads avec tests
 ## TODO: voir si peut ajouter temps écoulé/sys.time()
 ## TODO: gérer fichiers temporaires/à supprimer
 rule cleaning:
     input:
     output: R1= FILE_R1.fastq.gz, 
     log: 
-    threads:
+    threads: 8
     message: "=> Decontaminating all reads."
     script: "Prepare_data_dedup.sh"
     shell:
@@ -25,7 +26,7 @@ rule megahit:
     input: #rules.cleaning.output
     output: "{project}/3-Coassembly/TBD"
     log:  "{project}/3-Coassembly/Coassembly.log"
-    threads: {threads}
+    threads: 12
     message: "=> Performing coassembly with megahit."
     shell: "megahit -1 INPUT1 -2 INPUT2 -o {output} > {log} 2>&1"
     #megahit -1 "$name/$R1".fastq -2 "$name/$R2".fastq -o {output}
@@ -37,7 +38,7 @@ rule virsorter2:
             score="{project}/5-Phages/phageSeq.out/final-viral-score.tsv",
             virsort_fa="{project}/5-Phages/phageSeq.out/final-viral-combined.fa"
     log: "{project}/5-Phages/phageSeq.out/virsorter.log"
-    threads: {threads}
+    threads: 12
     message: "=> Finding viral sequences with virsorter2."
     shell: "virsorter run -w {project}/5-Phages/phageSeq.out -i {input} -j {threads} --include-groups "dsDNAphage,ssDNA" > {log} 2>&1"
 
@@ -52,7 +53,7 @@ rule checkv:
             vir_checkv="{project}/5-Phages/Checkv/viruses.fna",
             combined="{project}/5-Phages/Checkv/combined.fna",
     log: "{project}/5-Phages/Checkv/checkv.log"
-    threads: {threads}
+    threads: 10
     message: "=> Performing a quality check on virsorter results with checkv."
     run: 
         shell("checkv end_to_end {input} {project}/5-Phages/Checkv -t {threads} -d checkv-db-v* > {log} 2>&1")
@@ -61,19 +62,19 @@ rule checkv:
 rule create_index:
     input:#  output de netttoyage
     output:
-    log:
-    threads:
+    log: "{project}/4-Mapping/indexing.log"
+    threads: 8
     message: "=> Creating a bowtie index from the viral sequences."
     run: 
         shell("bowtie2-build rules.checkv.output.combined database-{project}")
         # Faire boucle? voir
-        shell("bowtie2 -x database-{project} -1 SAMPLE_unmapped_R1.fastq.gz **OUTPUT DE NETTOYAGE_R1** -2 SAMPLE_unmapped_R2.fastq.gz **OUTPUT DE NETTOYAGE R2** -S {project}/4-Mapping/NAME.sam -p {threads}")
+        shell("bowtie2 -x database-{project} -1 SAMPLE_unmapped_R1.fastq.gz **OUTPUT DE NETTOYAGE_R1** -2 SAMPLE_unmapped_R2.fastq.gz **OUTPUT DE NETTOYAGE R2** -S {project}/4-Mapping/NAME.sam -p {threads} > {log} 2>&1")
 # TODO: COMBINER AVEC PIPE? VOIR SI SE FAIT 
 rule sample_indexing:
     input: 
     output:
     log:
-    threads:
+    threads: 12
     message: "=> Indexing all cleaned samples with bowtie2."
     shell:
     ## Commandes par A.Vincent
@@ -88,7 +89,7 @@ rule transform_bam:
         unsorted="{project}/4-Mapping/NAME.bam",
         sorted_bam="{project}/4-Mapping/NAME_sorted.bam"
     log: "{project}/4-Mapping/bam_sorting.log"
-    threads:
+    threads: 8
     message: "=> Compressing the sam files into bam and sorting them."
     run: 
         shell("samtools view -@ {threads} -bS {input} -o ouput.unsorted > {log} 2>&1")
@@ -98,7 +99,7 @@ rule bam_stats:
     input: rules.transform_bam.output.sorted_bam
     output: "{project}/4-Mapping/NAMES.tsv"
     log: "{project}/4-Mapping/bam_stats.log"
-    threads:
+    threads: 8
     message: "=> Getting the number of reads of each contig per sample."
     run: 
         shell("samtools index -@ {threads} {input} > {log} 2>&1")
@@ -111,7 +112,7 @@ rule prodigal:
         proteins_out="{project}/6-Prodigal/proteins_{project}.faa",
         poten_genes="{project}/6-Prodigal/{project}_potential_genes.txt"
     log: "{project}/6-Prodigal/prodigal.log"
-    threads:
+    threads: 8
     message: "=> Running prodigal."
     shell: "prodigal -i {input} -o output.genes_out -a output.proteins_out -p meta -s output.poten_genes > {log} 2>&1"
 
@@ -119,7 +120,7 @@ rule gene2genome:
     input: rules.prodigal.output.proteins_out
     output: "{project}/5-Phages/Taxonomy/{project}_gene2genome.csv"
     log: "{project}/5-Phages/Taxonomy/gene2genome.log"
-    threads:
+    threads: 12
     message: "=> Creating the gene-to-genome index for vcontact2."
     shell: "vcontact2_gene2genome -p rules.prodigal.output.proteins_out -o {output} -s 'Prodigal-FAA' > {log} 2>&1"
 
@@ -127,7 +128,7 @@ rule vcontact2:
     input: rules.prodigal.output.proteins_out, rules.gene2genome.output
     output: "{project}/5-Phages/Taxonomy/genome_by_genome_overview.csv"
     log: "{project}/5-Phages/Taxonomy/vcontact.log"
-    threads:
+    threads: 12
     message: "=> Performing taxonomic identification with vContact2."
     shell: "vcontact2 --raw-proteins rules.prodigal.output.proteins_out -t {threads} --rel-mode 'Diamond' --proteins-fp rules.gene2genome.output -f -o {project}/5-Phages/Taxonomy/ > {log} 2>&1"
 
@@ -135,7 +136,7 @@ rule bacphlip:
     input: rules.checkv.output.combined
     output: "{project}/5-Phages/Lifestyle/combined.fna.bacphlip" # TODO: vérifier si doit mettre dans ligne de commande le déplacement
     log: "{project}/5-Phages/Lifestyle/bacphlip.log"
-    threads:
+    threads: 12
     message: "=> Performing lifestyle prediction with bacphlip."
     shell: "bacphlip -i {input} --multi_fasta -f --local_hmmsearch ***PATH_TO_HMMSEARCH*** > {log} 2>&1" 
 
@@ -146,9 +147,8 @@ rule finalTable:
         rules.checkv.output.complete,
         rules.bacphlip.output,
         rules.bam_stats.output        
-    output:
-    log:
-    threads:
+    output: "{project}/{project}_phageFind_highQuality.tsv"
+    threads: 4
     message: "=> Creating the final table with all important information."
     shell:
     
