@@ -4,6 +4,9 @@ report: "workflow/report/workflow.rst"
 
 configfile: "config.yaml"
 
+#use rule * from cleaning as cleaning_*
+
+
 # ---- Rules ---- #
 rule all:
     input:
