@@ -1,21 +1,22 @@
-### analysePhageFind
-### Author: Éléonore Lemieux
-### Date: 2022-05-17
-###
-###
-setwd("../../Desktop/phageFind/test_mouse/")
-## Importer les fichiers importants
+### phageFind.R
+### Author: Eleonore Lemieux
+### Date: 2022-07-19
+### Version: 1.0
+### 
+### 
 
-## Fichier qui donne qualité et longueur contigs
+
+## Import files
 quality <- read.table("quality_summary.tsv", h = TRUE, sep = "\t")
-
 viralScore <-
     read.table("final-viral-score.tsv", sep = "\t", h = TRUE)
 completeness <- read.table("completeness.tsv", sep = "\t", h = TRUE)
 bacphlip <-
     read.table("combined.fna.bacphlip", h = TRUE, row.names = NULL)
-taxo <- read.csv("../essai2/genome_by_genome_overview.csv", h = TRUE)
-
+taxo <-
+    read.csv("../essai2/genome_by_genome_overview.csv", h = TRUE)
+## Files with number of reads per sample
+## TODO: adjustable from input, make separate script?
 Amox1 <- read.table("Amoxicillin_T12-1_DC13.tsv", t = "\t")
 Amox2 <- read.table("Amoxicillin_T12-2_DC14.tsv", t = "\t")
 Amox3 <- read.table("Amoxicillin_T12-3_DC15.tsv", t = "\t")
@@ -26,7 +27,7 @@ Control2 <- read.table("Control_T12-2_DC02.tsv", sep = "\t")
 Control3 <- read.table("Control_T12-3_DC03.tsv", sep = "\t")
 Control4 <- read.table("Control_T12-4_DC04.tsv", sep = "\t")
 
-## Faire tableau entier, pas stringent
+## Create columns for number of reads, treatment and control
 nbAmox1 <- Amox1[order(Amox1$V1), c(1, 3)]
 nbAmox2 <- Amox2[order(Amox2$V1), c(1, 3)]
 nbAmox3 <- Amox3[order(Amox3$V1), c(1, 3)]
@@ -55,10 +56,11 @@ nbControl <- as.data.frame(nbControl)
 nbControl <- nbControl[order(nbControl$V1),]
 nbControl <- nbControl[-1, ]
 
-# Taxonomie
-# Sélectionner les contigs des échantillons
+## Taxonomy
+## TODO: adjust for input with grep pattern
+## Select non-database contigs
 taxo_contigs <- taxo[row.names(taxo[grep('k141', taxo$Genome),]),]
-# Sélectionner les contigs de la BD de référence
+# Select reference database contigs
 taxo_db <- taxo[row.names(taxo[grep('k141', taxo$Genome, invert = TRUE),]),]
 # Sélectionner les contigs ayant un match
 taxo_contig_match <- taxo_contigs[row.names(taxo_contigs[grep('VC', taxo_contigs$VC),]),]
@@ -84,7 +86,6 @@ for (i in 1:nrow(taxo_contig_match)) {
 # Conserver que ceux assignés
 taxo_match <- taxo_match_VC[row.names(taxo_match_VC[grep('Unassigned', taxo_match_VC, invert = TRUE),]),]
 
-# Sélectionner pour tableau stringent
 
 
 # Ordonner noms contigs
