@@ -33,7 +33,7 @@ nbAmox3 <- Amox3[order(Amox3$V1), c(1, 3)]
 nbAmox4 <- Amox4[order(Amox4$V1), c(1, 3)]
 nbTreatment <- matrix(nrow = nrow(nbAmox1), ncol = 2)
 nbTreatment[, 1] <- nbAmox1[, 1]
-for (i in seq_len(nrow(nbAmox1))) {
+for (i in 1:nrow(nbAmox1)) {
     nbTreatment[i, 2] <-
         paste(nbAmox1[i, 2], nbAmox2[i, 2], nbAmox3[i, 2], nbAmox4[i, 2], sep = ", ")
 }
@@ -47,7 +47,7 @@ nbControl3 <- Control3[order(Control3$V1), c(1, 3)]
 nbControl4 <- Control4[order(Control4$V1), c(1, 3)]
 nbControl <- matrix(nrow = nrow(nbControl1), ncol = 2)
 nbControl[, 1] <- nbControl1[, 1]
-for (i in seq_len(nrow(nbControl1))) {
+for (i in 1:nrow(nbControl1)) {
     nbControl[i, 2] <-
         paste(nbControl1[i, 2], nbControl2[i, 2], nbControl3[i, 2], nbControl4[i, 2], sep = ", ")
 }
@@ -70,7 +70,6 @@ row.names(taxo_db) <- 1:nrow(taxo_db)
 row.names(taxo_contigs) <- 1:nrow(taxo_contigs)
 ## Select identified contigs
 taxo_match_VC <- taxo_contigs
-# TODO: améliorer efficacité de la boucle, utiliser fonction interne?
 for (i in 1:nrow(taxo_contigs))
 {
     for (j in 1:nrow(taxo_db))
@@ -83,9 +82,10 @@ for (i in 1:nrow(taxo_contigs))
         }
     }
 }
+taxo_match_VC <- taxo_match_VC[order(taxo_match_VC$Genome),]
 # Only keep those assigned
 taxo_match <-
-    taxo_match_VC[row.names(taxo_match_VC[grep('Unassigned', taxo_match_VC, invert = TRUE), ]), ]
+    taxo_match_VC[row.names(taxo_match_VC[grep('Unassigned', taxo_match_VC[,4], invert = TRUE), ]), ]
 
 
 ## Order dataframes by name of contigs
@@ -177,3 +177,4 @@ row.names(table_court) <- 1:nrow(table_court)
 #            file = "Mouse_Amox_phageFind_highQuality.tsv",
 #            sep = "\t",
 #            fileEncoding = "UTF-8")
+
