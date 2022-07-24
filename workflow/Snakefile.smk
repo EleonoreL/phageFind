@@ -17,7 +17,7 @@ rule all:
 ## TODO: voir si peut ajouter temps écoulé/sys.time()
 ## TODO: gérer fichiers temporaires/à supprimer
 rule cleaning:
-    input:
+    input: expand("{sample}.")
     output: R1= FILE_R1.fastq.gz, 
     log: 
     threads: 8
